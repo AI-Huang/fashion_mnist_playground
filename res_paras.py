@@ -156,7 +156,7 @@ def train(resnet_version, random_labels, freeze_before_k):
 
     mlp = MLP(resnet_version, random_labels, block_k=freeze_before_k)
     i = mlp.load()
-    batch_size = 128 # depends on CPU/GPU
+    batch_size = 16 # depends on CPU/GPU 128 for CPU, 32 for 650m
     n_epochs = 10
     if random_labels is True:
         mnist.train._labels = np.random.randint(0, N_CLASSES, mnist.train.labels.shape[0])
@@ -175,10 +175,10 @@ def train(resnet_version, random_labels, freeze_before_k):
         if i % 100 == 0:
             batch_test_x, batch_test_y = mnist.test.next_batch(100)
             mlp.test(batch_test_y, batch_test_x, i)
-            '''
+
             mlp.save(i)
             print('saving after {} iterations'.format(i))
-            '''
+
             localtime = time.asctime( time.localtime(time.time()))
             print(localtime)
             print('EPOCH: ', mnist.train._epochs_completed)
